@@ -1,0 +1,21 @@
+@import '../../variables';
+
+.tasksBlock {
+  width: 33%;
+  margin-right: 20px;
+  padding: 20px;
+  padding-bottom: 0;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.listName {
+  margin-bottom: 20px;
+}
+
+.task {
+  outline: 1px solid $black;
+  margin-bottom: 20px;
+}

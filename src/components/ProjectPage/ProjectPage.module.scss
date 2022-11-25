@@ -12,14 +12,5 @@
 
 .tasksBlockWrapper {
   display: flex;
-}
-
-.tasksBlock {
-  width: 30%;
-  margin-right: 20px;
-  padding: 20px;
-
-  &:last-child {
-    margin-right: 0;
-  }
+  justify-content: space-between;
 }
