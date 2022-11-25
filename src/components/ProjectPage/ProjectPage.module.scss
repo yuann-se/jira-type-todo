@@ -1,0 +1,25 @@
+@import '../../variables';
+
+.projectSection {
+  background-color: $bg;
+  min-height: 100vh;
+  padding: 50px;
+}
+
+// .container {
+//   display: flex;
+// }
+
+.tasksBlockWrapper {
+  display: flex;
+}
+
+.tasksBlock {
+  width: 30%;
+  margin-right: 20px;
+  padding: 20px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
