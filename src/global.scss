@@ -72,24 +72,24 @@ p {
 }
 
 button {
-  padding: 0;
-  border: 0;
-  background: transparent;
+  // padding: 0;
+  // border: 0;
+  // background: transparent;
   cursor: pointer;
 }
 
-button:focus,
-button:focus-visible,
-a:focus,
-a:focus-visible,
-input:focus,
-input:focus-visible {
-  outline: none;
-}
+// button:focus,
+// button:focus-visible,
+// a:focus,
+// a:focus-visible,
+// input:focus,
+// input:focus-visible {
+//   outline: none;
+// }
 
-input {
-  border-color: transparent;
-}
+// input {
+//   border-color: transparent;
+// }
 
 
 .container {

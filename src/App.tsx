@@ -1,10 +1,10 @@
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
-import style from "./App.module.scss"
 import { ProjectPage } from "./components/ProjectPage/ProjectPage";
 import { SelectProjectPage } from "./components/SelectProjectPage/SelectProjectPage";
 import './global.scss'
 
 function App() {
+
   return (
     <BrowserRouter>
       <Switch>
@@ -23,7 +23,7 @@ function App() {
 
       </Switch>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
