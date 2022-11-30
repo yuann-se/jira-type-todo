@@ -1,0 +1,36 @@
+@import '../../../variables';
+
+.task {
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 7px;
+  padding: 20px;
+  transition: background-color .2s ease;
+  box-shadow: 2px 2px 10px rgb(0 0 0 / 10%);
+
+  &.isDragging {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.meta {
+  display: flex;
+
+  .commentsCount {
+    display: flex;
+    align-items: center;
+
+    &:nth-child(2) {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+
+    &:nth-child(3) {
+      margin-right: 10px;
+    }
+
+    &>span {
+      margin-left: 5px;
+    }
+  }
+}

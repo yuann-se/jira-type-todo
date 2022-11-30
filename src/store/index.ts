@@ -8,13 +8,19 @@ export interface IComment {
   body: string
 }
 
+export enum EPriority {
+  high = 'high',
+  medium = 'medium',
+  low = 'low'
+}
+
 export interface ITask {
   id: number
   title: string
   descr?: string
   creationDate: Date
-  finishDate: string
-  priority: 'high' | 'medium' | 'low'
+  finishDate: Date
+  priority: EPriority
   files?: FileList
   subtasks: ITask[]
   comments?: IComment[]
@@ -42,44 +48,35 @@ const initialState: IRootState = {
   otherIds: 0
 }
 
-export const addNewTask = (payload: ITask) => ({
-  type: 'ADD_NEW_TASK',
-  payload
-})
-
-export const addSubtask = (payload: { subtask: ITask, listName: string, parentId: number }) => ({
-  type: 'ADD_SUBTASK',
-  payload
-})
-
-export const removeSubtask = (payload: { subtaskId: number, listName: string, parentId: number }) => ({
-  type: 'REMOVE_SUBTASK',
-  payload
-})
-
-export const moveTask = (payload: IRootState) => ({
-  type: 'MOVE_TASK',
-  payload
-})
-
-export const addComment = (payload: { comment: string, taskId: number, parentId?: number, listName: string }) => ({
-  type: 'ADD_COMMENT',
-  payload
-})
-
-export const removeComment = (payload: { commentId: number, taskId: number, listName: string }) => ({
-  type: 'REMOVE_COMMENT',
-  payload
-})
-
-const persistedState = loadState()
-
 const rootReducer: Reducer<IRootState> = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_NEW_TASK': return {
       ...state,
       queue: [...state?.queue, action.payload],
       taskIds: state.taskIds + 1
+    }
+
+    case 'EDIT_TASK': {
+      const listName = action.payload.listName.toLowerCase()
+      const tasksList = state[listName as keyof IColumns]
+
+      for (let i = 0; i < tasksList.length; ++i) {
+        if (tasksList[i].id === action.payload.task.id) {
+          tasksList[i] = action.payload.task
+          break
+        }
+      }
+
+      return { ...state, [listName as keyof IRootState]: tasksList }
+    }
+
+    case 'REMOVE_TASK': {
+      const listName = action.payload.listName.toLowerCase()
+      let tasksList = state[listName as keyof IColumns]
+
+      tasksList = tasksList.filter((item) => item.id !== action.payload.taskId)
+
+      return { ...state, [listName as keyof IColumns]: tasksList }
     }
 
     case 'ADD_SUBTASK': {
@@ -94,6 +91,24 @@ const rootReducer: Reducer<IRootState> = (state = initialState, action) => {
       }
 
       return { ...state, [listName as keyof IRootState]: tasksList, otherIds: state.otherIds + 1 }
+    }
+
+    case 'EDIT_SUBTASK': {
+      const listName = action.payload.listName.toLowerCase()
+      const tasksList = state[listName as keyof IColumns]
+
+      for (let i = 0; i < tasksList.length; ++i) {
+        if (tasksList[i].id === action.payload.parentId) {
+          for (let j = 0; j < tasksList[i].subtasks.length; ++j) {
+            if (tasksList[i].subtasks[j] === action.payload.subtask.id) {
+              tasksList[i].subtasks[j] = action.payload.subtask
+              break
+            }
+          }
+        }
+      }
+
+      return { ...state, [listName as keyof IRootState]: tasksList }
     }
 
     case 'REMOVE_SUBTASK': {
@@ -113,7 +128,6 @@ const rootReducer: Reducer<IRootState> = (state = initialState, action) => {
     case 'ADD_COMMENT': {
       const listName = action.payload.listName.toLowerCase()
       const tasksList = state[listName as keyof IColumns]
-      console.log(action.payload.parentId)
 
       for (let i = 0; i < tasksList.length; ++i) {
         if (tasksList[i].id === action.payload.taskId) {
@@ -153,6 +167,9 @@ const rootReducer: Reducer<IRootState> = (state = initialState, action) => {
     default: return state
   }
 }
+
+const persistedState = loadState()
+
 const store = createStore(rootReducer, persistedState, composeWithDevTools())
 
 store.subscribe(() => saveState(store.getState()))

@@ -1,0 +1,32 @@
+@import '../../../../variables';
+
+.taskTitleWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .taskNumber {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    margin-right: 10px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid $black;
+    }
+  }
+
+  .taskTitle {
+    width: 65%;
+  }
+}

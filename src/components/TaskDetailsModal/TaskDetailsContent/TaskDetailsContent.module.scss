@@ -1,0 +1,33 @@
+.title {
+
+  margin-bottom: 20px;
+
+  h4 {
+    font-size: 20px;
+  }
+}
+
+.meta {
+  display: flex;
+  margin-bottom: 30px;
+
+  &>p:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+
+.taskDescr {
+  margin-bottom: 30px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.editBtn {
+  margin-left: auto;
+
+  button {
+    margin-bottom: 0;
+    padding: 5px 30px;
+    font-size: 14px;
+  }
+}

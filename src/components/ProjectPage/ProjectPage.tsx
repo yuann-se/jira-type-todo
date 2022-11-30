@@ -1,12 +1,19 @@
 import style from './ProjectPage.module.scss'
 import { NewTaskForm } from '../NewTaskForm/NewTaskForm'
 import { useSelector } from 'react-redux'
-import { IRootState, ITask, moveTask } from '../../store'
+import { IRootState } from '../../store'
 import { TaskColumn } from '../TasksColumn/TasksColumn'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
+import { moveTask } from '../../store/actionCreators'
+import { useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
+import { Divider } from '../UI/Divider/Divider'
+import { AddBtn } from '../UI/AddBtn/AddBtn'
 
 export const ProjectPage = () => {
+
+  const [isFormOpen, setIsFormOpen] = useState(false)
 
   const state = useSelector<IRootState, IRootState>((state) => state)
   const dispatch = useDispatch()
@@ -53,14 +60,35 @@ export const ProjectPage = () => {
   return (
     <section className={style.projectSection}>
       <div className={`container ${style.container}`}>
-        <NewTaskForm />
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <div className={style.tasksBlockWrapper}>
-            <TaskColumn listName='Queue' tasks={state.queue} />
-            <TaskColumn listName='Development' tasks={state.development} />
-            <TaskColumn listName='Done' tasks={state.done} />
-          </div>
-        </DragDropContext>
+
+        <CSSTransition
+          in={isFormOpen}
+          timeout={500}
+          classNames='addNewTaskForm'
+          mountOnEnter
+          unmountOnExit
+        >
+          <NewTaskForm onSubmit={() => setIsFormOpen(false)} />
+        </CSSTransition>
+
+        <div className={style.contentWrapper}>
+
+          <AddBtn
+            onClick={() => setIsFormOpen((prev) => !prev)}
+            isOpen={isFormOpen}
+            text='Add new task'
+          />
+
+          <Divider mt="50px" mb="30px" />
+
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <div className={style.tasksBlockWrapper}>
+              <TaskColumn listName='Queue' tasks={state.queue} />
+              <TaskColumn listName='Development' tasks={state.development} />
+              <TaskColumn listName='Done' tasks={state.done} />
+            </div>
+          </DragDropContext>
+        </div>
       </div>
     </section>
   )

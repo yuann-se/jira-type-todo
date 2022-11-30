@@ -3,6 +3,9 @@
 .tasksBlock {
   width: 33%;
   margin-right: 20px;
+  padding: 20px 10px;
+  padding-bottom: 0;
+  border-radius: 7px;
 
   &:last-child {
     margin-right: 0;
@@ -11,50 +14,6 @@
 
 .listName {
   margin-bottom: 20px;
-}
-
-.task {
-  outline: 1px solid $black;
-  margin-bottom: 20px;
-}
-
-
-.modal-enter {
-  opacity: 0;
-
-  &>div {
-    opacity: 0;
-    transform: translateX(-150px);
-  }
-}
-
-.modal-enter-active {
-  opacity: 1;
-  transition: opacity .4s ease;
-
-  &>div {
-    opacity: 1;
-    transform: none;
-    transition: opacity .4s ease, transform .4s ease;
-  }
-}
-
-.modal-exit {
-  opacity: 1;
-
-  &>div {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.modal-exit-active {
-  opacity: 0;
-  transition: opacity .4s ease;
-
-  &>div {
-    opacity: 0;
-    transform: translateX(-150px);
-    transition: opacity .4s ease, transform .4s ease;
-  }
+  text-transform: uppercase;
+  font-size: 18px;
 }

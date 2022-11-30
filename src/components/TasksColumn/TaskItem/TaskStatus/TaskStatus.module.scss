@@ -1,0 +1,27 @@
+@import '../../../../variables';
+
+.taskStatus {
+  position: absolute;
+  right: 0;
+  padding: 5px;
+
+  font-size: 12px;
+  text-transform: uppercase;
+
+  border-radius: 15px;
+
+  &.Queue {
+    color: $blueSat;
+    background-color: $blueDark;
+  }
+
+  &.Development {
+    color: $yellowDark;
+    background-color: $yellowSat;
+  }
+
+  &.Done {
+    color: $greenDark;
+    background-color: $greenSat;
+  }
+}

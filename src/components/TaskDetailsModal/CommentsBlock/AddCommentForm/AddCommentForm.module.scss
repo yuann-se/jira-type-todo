@@ -1,0 +1,27 @@
+@import '../../../../variables';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 60%;
+  margin-bottom: 30px;
+
+  outline: 1px solid $bgDark;
+  background-color: $bg;
+
+  textarea {
+    width: 100%;
+    background-color: white;
+    padding: 15px;
+  }
+
+  button {
+    background-color: $blueSat;
+    color: white;
+    text-transform: uppercase;
+    padding: 15px 25px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}

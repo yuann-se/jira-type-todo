@@ -1,8 +1,12 @@
 import { FormEvent, Fragment, useState } from "react"
 import { useDispatch } from "react-redux"
-import { addComment, IComment, removeComment } from "../../../../store"
+import { IComment } from "../../../../store"
+import { addComment, removeComment } from "../../../../store/actionCreators"
 import { AddCommentForm } from "../AddCommentForm/AddCommentForm"
 import style from './Comments.module.scss'
+import { FaRegUserCircle } from "react-icons/fa"
+import { BsReply } from "react-icons/bs"
+import { IoMdClose } from "react-icons/io"
 
 interface IProps {
   commentsList: IComment[]
@@ -23,8 +27,6 @@ export const Comments = ({ commentsList, taskId, listName, parentId }: IProps) =
 
   const dispatch = useDispatch()
 
-  console.log(parentId)
-
   const handleOpenForm = (id: number) => {
     isReplyFormOpen[id as keyof IReplyForm]
       ? setIsReplyFormOpen({ ...isReplyFormOpen, [id]: false })
@@ -33,7 +35,6 @@ export const Comments = ({ commentsList, taskId, listName, parentId }: IProps) =
 
   const handleSubmitReply = (commentId: number) => (text: string | undefined) => (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(commentId, text)
 
     if (text) {
       dispatch(addComment({ comment: text, taskId, parentId: commentId, listName }))
@@ -50,19 +51,41 @@ export const Comments = ({ commentsList, taskId, listName, parentId }: IProps) =
     <div className={style.commentsWrapper}>
       {commentsList.map((comment) => {
         if (comment.parentId === parentId) {
-          return (<Fragment key={comment.id}>
-            <p className={style.commentBody}>{comment.body}</p>
-            <button onClick={() => handleOpenForm(comment.id)}>{isReplyFormOpen[comment.id] ? 'Cancel' : 'Reply'}</button>
+          return (
+            <div className={style.singleCommentWrapper} key={comment.id}>
 
-            {isReplyFormOpen[comment.id] && (<AddCommentForm onSubmit={handleSubmitReply(comment.id)} />)}
+              <div className={style.avatar}>
+                <FaRegUserCircle size={'2em'} color='#5a51b1' />
+              </div>
 
-            <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
+              <div className={style.content}>
+                <p className={style.username}>Username</p>
 
-            {commentsList.some(item => item.parentId === comment.id) && (
-              <Comments commentsList={commentsList} taskId={taskId} listName={listName} parentId={comment.id} />
-            )}
+                <p className={style.commentBody}>{comment.body}</p>
 
-          </Fragment>)
+                <div className={style.btnsWrapper}>
+                  <button
+                    onClick={() => handleOpenForm(comment.id)}
+                    className={`iconWithText ${style.replyBtn}`}>
+                    {isReplyFormOpen[comment.id] ? <IoMdClose /> : <BsReply />}
+                    <span>{isReplyFormOpen[comment.id] ? 'Cancel' : 'Reply'}</span>
+                  </button>
+
+                  <button
+                    className={`iconWithText ${style.replyBtn}`}
+                    onClick={() => handleDeleteComment(comment.id)}>
+                    <IoMdClose />
+                    <span>Delete</span>
+                  </button>
+                </div>
+
+                {isReplyFormOpen[comment.id] && (<AddCommentForm onSubmit={handleSubmitReply(comment.id)} />)}
+
+                {commentsList.some(item => item.parentId === comment.id) && (
+                  <Comments commentsList={commentsList} taskId={taskId} listName={listName} parentId={comment.id} />
+                )}
+              </div>
+            </div>)
         }
       }
 

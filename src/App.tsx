@@ -2,6 +2,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { ProjectPage } from "./components/ProjectPage/ProjectPage";
 import { SelectProjectPage } from "./components/SelectProjectPage/SelectProjectPage";
 import './global.scss'
+import './transitionClasses.scss'
 
 function App() {
 

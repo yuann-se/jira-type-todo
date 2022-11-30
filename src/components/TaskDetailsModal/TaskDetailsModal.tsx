@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom"
 import { useDisableScroll } from "../../hooks/useDisableScroll"
 import style from './TaskDetailsModal.module.scss'
 import { TaskDetailsContent } from "./TaskDetailsContent/TaskDetailsContent"
+import { IoMdClose } from "react-icons/io"
 
 export const TaskDetailsModal = () => {
 
@@ -26,7 +27,10 @@ export const TaskDetailsModal = () => {
   return createPortal((
     <div className={style.modalWrapper} onClick={handleOverlayClick}>
       <div className={style.modal} ref={modalRef}>
-        <button className={style.closeBtn} onClick={handleClick}>X</button>
+
+        <button className={style.closeBtn} onClick={handleClick}>
+          <IoMdClose size={'1.5em'} />
+        </button>
 
         <TaskDetailsContent />
 

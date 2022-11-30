@@ -1,0 +1,43 @@
+@import '../../../variables';
+
+.subtask {
+  position: relative;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: $bg;
+  border-radius: 15px;
+
+  form>div {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.header {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.taskDescr {
+  line-height: 1.2;
+  margin-bottom: 15px;
+}
+
+.meta {
+  display: flex;
+}
+
+.editBtn {
+  margin-left: auto;
+
+  button {
+    margin-bottom: 0;
+    padding: 5px 30px;
+    font-size: 14px;
+  }
+}

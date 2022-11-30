@@ -1,71 +1,158 @@
 import style from './NewTaskForm.module.scss'
-
-import React, { FormEvent, useRef, useState } from "react"
+import { FormEvent, useRef, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
-import { addNewTask, addSubtask, IRootState, ITask } from '../../store'
+import { EPriority, IRootState, ITask } from '../../store'
+import { addSubtask, addNewTask, editTask, removeTask, removeSubtask, editSubtask } from '../../store/actionCreators'
+import DatePicker from 'react-date-picker'
+import { MdFileDownloadDone } from "react-icons/md"
+import { RiDeleteBin7Line } from "react-icons/ri"
+import Select from 'react-select'
+import { useHistory } from 'react-router-dom'
 
 interface IProps {
   isSubtask?: boolean
+  subtaskId?: number
   parentTaskId?: number
   listName?: string
+  onSubmit?: () => void
+  isEdit?: boolean
+  task?: ITask
 }
 
-export const NewTaskForm = ({ isSubtask, parentTaskId, listName }: IProps) => {
+export const NewTaskForm = ({ isSubtask, parentTaskId, listName, onSubmit, isEdit, task }: IProps) => {
+
+  const [dateValue, setDateValue] = useState(isEdit ? new Date(task!.finishDate) : new Date())
+  const [priority, setPriority] = useState<EPriority>(EPriority.medium)
 
   const taskNumber = useSelector<IRootState, number>((state) => state.taskIds)
   const subtaskNumber = useSelector<IRootState, number>((state) => state.otherIds)
 
   const titleRef = useRef<HTMLInputElement>(null)
-  const dateRef = useRef<HTMLInputElement>(null)
-  const fileRef = useRef<HTMLInputElement>(null)
+  const descrRef = useRef<HTMLTextAreaElement>(null)
+
   const dispatch = useDispatch()
+  const history = useHistory()
+
+  const options = [
+    { value: EPriority.high, label: 'high' },
+    { value: EPriority.medium, label: 'medium' },
+    { value: EPriority.low, label: 'low' }
+  ]
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (titleRef.current?.value.trim() && dateRef.current?.value) {
+    console.log(dateValue)
+    if (!titleRef.current?.value.trim() || !dateValue) return
 
-      const newTask: ITask = {
-        id: isSubtask ? subtaskNumber : taskNumber,
-        title: titleRef.current.value.trim(),
-        creationDate: new Date(),
-        finishDate: dateRef.current.value,
-        priority: 'low',
-        subtasks: [],
-        comments: [],
-        files: fileRef.current?.files ? fileRef.current?.files : undefined
-      }
-
-      if (isSubtask && listName && parentTaskId) {
-        dispatch(addSubtask({
-          subtask: newTask,
-          listName: listName,
-          parentId: parentTaskId
-        }))
-      }
-      else { dispatch(addNewTask(newTask)) }
-
-      titleRef.current.value = ''
-      dateRef.current.value = ''
-      if (fileRef.current) fileRef.current.value = ''
+    const newTask: ITask = {
+      id: isEdit ? task!.id : isSubtask ? subtaskNumber : taskNumber,
+      title: titleRef.current.value.trim(),
+      descr: descrRef.current?.value ? descrRef.current?.value : '',
+      creationDate: isEdit ? task!.creationDate : new Date(),
+      finishDate: dateValue,
+      priority: priority,
+      subtasks: isEdit ? task!.subtasks : [],
+      comments: isEdit ? task!.comments : [],
     }
+
+    if (onSubmit) onSubmit()
+
+    if (isEdit && task && listName) {
+      dispatch(editTask({ task: newTask, listName: listName }))
+      return
+    }
+
+    if (isEdit && isSubtask && listName && parentTaskId) {
+      dispatch(editSubtask({ subtask: newTask, listName: listName, parentId: parentTaskId }))
+      return
+    }
+
+    if (isSubtask && listName && parentTaskId) {
+      dispatch(addSubtask({ subtask: newTask, listName: listName, parentId: parentTaskId }))
+      return
+    }
+
+    dispatch(addNewTask(newTask))
   }
+
+  const handleDelete = () => {
+    if (!task || !listName) return
+
+    if (isEdit && isSubtask && parentTaskId) {
+      dispatch(removeSubtask({ subtaskId: task.id, listName: listName, parentId: parentTaskId }))
+      return
+    }
+
+    history.push('/projects/newProject')
+    setTimeout(() => {
+      dispatch(removeTask({ taskId: task.id, listName: listName }))
+    }, 500)
+
+  }
+
   return (
-    <div>
-      <form className={style.form} onSubmit={handleSubmit}>
-        <label htmlFor="title" className={style.label}>Title</label>
-        <input type="text" name='title' className={style.input} ref={titleRef} />
+    <form className={style.form} onSubmit={handleSubmit}>
+      <div className={style.contentWrapper}>
 
-        <label htmlFor="descr" className={style.label}>Description</label>
-        <input type="text" name='descr' className={style.input} />
+        <div className={style.inputWrapper}>
+          <label htmlFor="title" className={style.label}>Title</label>
+          <input
+            type="text"
+            name='title'
+            className={style.input}
+            ref={titleRef}
+            defaultValue={isEdit ? task?.title : ''}
+          />
+        </div>
 
-        <label htmlFor="finishDate" className={style.label}>Finish Date</label>
-        <input type="date" name='finishDate' className={style.input} ref={dateRef} />
+        <div className={style.inputWrapper}>
+          <label htmlFor="descr" className={style.label}>Description</label>
+          <textarea
+            rows={3}
+            name='descr'
+            className={style.input}
+            ref={descrRef}
+            defaultValue={isEdit ? task?.descr : ''}
+          />
+        </div>
 
-        {/* <label htmlFor="file" className={style.label}>Finish Date</label> */}
-        <input type="file" multiple name='file' className={style.input} ref={fileRef} onChange={() => console.log(fileRef.current?.files)} />
+        <div className={style.inputWrapper}>
+          <label className={style.label}>Priority</label>
+          <Select
+            className={style.select}
+            options={options}
+            defaultValue={isEdit ? { value: task?.priority, label: `${task?.priority}` } : options[1]}
+            onChange={(choice) => setPriority(choice?.value || EPriority.medium)}
+          />
+        </div>
 
-        <button>Add</button>
-      </form>
-    </div>
+        <div className={style.inputWrapper}>
+          <label htmlFor="finishDate" className={style.label}>Finish Date</label>
+          <DatePicker
+            value={dateValue}
+            onChange={(date: Date) => setDateValue(date)}
+            minDate={new Date()}
+            required
+            className={style.datePicker}
+            calendarClassName={style.calendar}
+          />
+        </div>
+
+        <div className={style.btnsWrapper}>
+          <button className={`baseBtn ${style.addBtn}`}>
+            <MdFileDownloadDone size='1.2em' />
+            <span>{isEdit ? 'Save' : 'Add'}</span>
+          </button>
+
+          {isEdit && (
+            <button type='button' className={`baseBtn ${style.removeBtn}`} onClick={handleDelete}>
+              <RiDeleteBin7Line size='1.2em' />
+              <span>Delete</span>
+            </button>
+          )}
+        </div>
+
+      </div>
+    </form>
   )
 }
