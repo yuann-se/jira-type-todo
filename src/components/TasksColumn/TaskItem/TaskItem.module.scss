@@ -15,21 +15,76 @@
 
 .meta {
   display: flex;
+  margin-bottom: 5px;
+  justify-content: space-between;
+
+  .innerWrapper {
+    display: flex;
+  }
 
   .commentsCount {
     display: flex;
     align-items: center;
 
-    &:nth-child(2) {
-      margin-left: auto;
-      margin-right: 10px;
-    }
-
-    &:nth-child(3) {
+    &:not(:last-child) {
       margin-right: 10px;
     }
 
     &>span {
+      margin-left: 5px;
+    }
+  }
+}
+
+.stLisk {
+  margin-top: 10px;
+}
+
+.subtaskItem {
+  position: relative;
+  display: flex;
+  padding: 5px;
+  margin-top: 5px;
+  align-items: center;
+  outline: 1px solid $bgDark;
+  border-radius: 7px;
+
+  .stTitle {
+    max-width: 80%;
+  }
+}
+
+@media (max-width: $bpL) {
+  .meta {
+    flex-direction: column;
+
+    .innerWrapper {
+      margin-left: 5px;
+    }
+  }
+}
+
+@media (max-width: $bpM) {
+  .meta {
+    flex-direction: row;
+
+    .innerWrapper {
+      margin-left: 0;
+    }
+  }
+}
+
+@media (max-width: $bpXS) {
+  .task {
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: $bpXXS) {
+  .meta {
+    flex-direction: column;
+
+    .innerWrapper {
       margin-left: 5px;
     }
   }

@@ -1,3 +1,5 @@
+@import '../../variables';
+
 .modalWrapper {
   position: fixed;
   inset: 0;
@@ -28,4 +30,31 @@
   position: absolute;
   right: 20px;
   top: 20px;
+}
+
+@media (max-width: $bpL) {
+  .modalWrapper {
+    padding: 50px;
+  }
+}
+
+@media (max-width: $bpS) {
+  .modalWrapper {
+    padding: 30px;
+  }
+
+  .modal {
+    padding: 50px 20px;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .modalWrapper {
+    padding: 0;
+  }
+
+  .modal {
+    border-radius: 0;
+    margin-bottom: 0;
+  }
 }

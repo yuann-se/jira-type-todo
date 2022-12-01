@@ -11,7 +11,6 @@ interface IProps {
 export const TaskColumn = ({ listName, tasks }: IProps) => {
 
   return (
-
     <div className={style.tasksBlock}>
       <h3 className={style.listName}>{listName}</h3>
       <Droppable droppableId={listName}>

@@ -1,13 +1,12 @@
 import { useState } from "react"
-import { useDispatch } from "react-redux"
 import { ITask } from "../../../store"
-import { removeSubtask } from "../../../store/actionCreators"
 import { NewTaskForm } from "../../NewTaskForm/NewTaskForm"
 import { CSSTransition, TransitionGroup } from "react-transition-group"
 import style from './Subtasks.module.scss'
 import { AddBtn } from "../../UI/AddBtn/AddBtn"
 import { TaskDateRange } from "../../TasksColumn/TaskItem/TaskDateRange/TaskDateRange"
 import { TaskPriority } from "../../TasksColumn/TaskItem/TaskPriority/TaskPriority"
+import { TaskStatus } from "../../TasksColumn/TaskItem/TaskStatus/TaskStatus"
 
 interface IProps {
   task: ITask
@@ -23,17 +22,19 @@ export const Subtasks = ({ task, listName }: IProps) => {
   const [isAddSubtaskFormOpen, setIsAddSubtaskFormOpen] = useState(false)
   const [isEditFormOpen, setIsEditFormOpen] = useState<IEditForm>({})
 
-  const dispatch = useDispatch()
-
-  const handleRemoveSubtask = (subtaskId: number) => {
-    dispatch(removeSubtask({ subtaskId: subtaskId, listName: listName, parentId: task.id }))
-  }
-
   const handleOpenForm = (stId: number) => {
     isEditFormOpen[stId as keyof IEditForm]
       ? setIsEditFormOpen({ ...isEditFormOpen, [stId]: false })
       : setIsEditFormOpen({ ...isEditFormOpen, [stId]: true })
   }
+
+  // const selectBgColor = (status: EStatus | null | undefined) => {
+  //   switch (status) {
+  //     case EStatus.done: return '#e3ffe1'
+  //     case EStatus.dev: return '#fff4d4'
+  //     default: return '#f1f5ff'
+  //   }
+  // }
 
   return (
     <>
@@ -48,11 +49,18 @@ export const Subtasks = ({ task, listName }: IProps) => {
                   timeout={500}
                   classNames="subtask"
                 >
-                  <li className={style.subtask}>
+                  <li className={style.subtask}
+                  // style={{ backgroundColor: selectBgColor(subtask.status) }}
+                  >
 
                     <h5 className={`iconWithText ${style.title}`}>
                       <TaskPriority priority={subtask.priority} />
                       <span>{subtask.title}</span>
+
+                      {!!subtask.status && (
+                        <TaskStatus status={subtask.status} />
+                      )}
+
                     </h5>
 
                     {subtask.descr && <p className={style.taskDescr}>{subtask.descr}</p>}

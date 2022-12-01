@@ -8,6 +8,7 @@ import { MdOutlineModeComment, MdOutlineLink } from "react-icons/md"
 import { TaskPriority } from "./TaskPriority/TaskPriority"
 import { TaskTitle } from "./TaskTitle/TaskTitle"
 import { TaskDateRange } from "./TaskDateRange/TaskDateRange"
+import { TaskStatus } from "./TaskStatus/TaskStatus"
 
 interface IProps {
   task: ITask
@@ -37,26 +38,34 @@ export const TaskItem = ({ task, ind, listName }: IProps) => {
 
                 <TaskDateRange creationDate={task.creationDate} finishDate={task.finishDate} />
 
-                <p className={style.commentsCount}>
-                  <MdOutlineModeComment />
-                  <span>{task.comments?.length || 0}</span>
-                </p>
+                <div className={style.innerWrapper}>
+                  <p className={style.commentsCount}>
+                    <MdOutlineModeComment />
+                    <span>{task.comments?.length || 0}</span>
+                  </p>
 
-                <p className={style.commentsCount}>
-                  <MdOutlineLink size={'1.5em'} />
-                  <span>{task.subtasks?.length || 0}</span>
-                </p>
+                  <p className={style.commentsCount}>
+                    <MdOutlineLink size={'1.5em'} />
+                    <span>{task.subtasks?.length || 0}</span>
+                  </p>
 
-                <TaskPriority priority={task.priority} />
+                  <TaskPriority priority={task.priority} />
+                </div>
+
               </div>
 
               {!!task.subtasks.length &&
-                <>
-                  <p>Subtasks:</p>
-                  <ul>
-                    {task.subtasks.map((subtask) => (<li key={subtask.id}>{subtask.title}</li>))}
-                  </ul>
-                </>
+                <ul className={style.stLisk}>
+                  {task.subtasks.map((subtask) => (
+                    <li key={subtask.id} className={style.subtaskItem}>
+                      <TaskPriority priority={subtask.priority} />
+                      <p className={style.stTitle}>{subtask.title}</p>
+                      {!!subtask.status && (
+                        <TaskStatus status={subtask.status} />
+                      )}
+                    </li>
+                  ))}
+                </ul>
               }
             </Link>
 

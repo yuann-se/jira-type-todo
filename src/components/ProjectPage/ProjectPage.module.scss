@@ -3,13 +3,13 @@
 .projectSection {
   background-color: $bg;
   min-height: 100vh;
-  padding: 50px;
-}
-
-.container {
   padding: 50px 30px;
-  border-radius: 10px;
-  box-shadow: 2px 2px 10px rgb(0 0 0 / 10%);
+
+  .container {
+    padding: 50px 20px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 10%);
+  }
 }
 
 .contentWrapper {
@@ -35,4 +35,20 @@
 
 .addBtn {
   margin-bottom: 50px;
+}
+
+@media (max-width: $bpM) {
+  .tasksBlockWrapper {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .projectSection {
+    padding: 0;
+
+    .container {
+      padding: 50px 15px;
+    }
+  }
 }

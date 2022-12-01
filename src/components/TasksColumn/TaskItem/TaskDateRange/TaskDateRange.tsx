@@ -8,9 +8,9 @@ interface IProps {
 
 export const TaskDateRange = ({ creationDate, finishDate }: IProps) => {
   return (
-    <p className={style.dateRange}>
+    <div className={style.dateRange}>
       <AiOutlineCalendar size={'1.2em'} />
       <span>{new Date(creationDate).toLocaleDateString('en-EN', { month: 'short', day: 'numeric' })} - {new Date(finishDate).toLocaleDateString('en-EN', { month: 'short', day: 'numeric' })}</span>
-    </p>
+    </div>
   )
 }

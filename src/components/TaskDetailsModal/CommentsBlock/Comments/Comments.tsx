@@ -1,4 +1,4 @@
-import { FormEvent, Fragment, useState } from "react"
+import { FormEvent, useState } from "react"
 import { useDispatch } from "react-redux"
 import { IComment } from "../../../../store"
 import { addComment, removeComment } from "../../../../store/actionCreators"
@@ -86,7 +86,7 @@ export const Comments = ({ commentsList, taskId, listName, parentId }: IProps) =
                 )}
               </div>
             </div>)
-        }
+        } else return null
       }
 
       )}

@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  width: 60%;
+  width: 100%;
+  max-width: 600px;
   margin-bottom: 30px;
 
   outline: 1px solid $bgDark;
@@ -23,5 +24,14 @@
     padding: 15px 25px;
     font-size: 12px;
     font-weight: 500;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .form {
+    button {
+      padding: 10px 20px;
+      font-size: 10px;
+    }
   }
 }

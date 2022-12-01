@@ -1,12 +1,14 @@
 import style from './TaskStatus.module.scss'
 
 interface IProps {
-  listName: string
+  status: string
 }
 
-export const TaskStatus = ({ listName }: IProps) => {
+export const TaskStatus = ({ status }: IProps) => {
+
+  if (status === 'Development') status = 'Dev'
 
   return (
-    <span className={`${style.taskStatus} ${style[listName]}`}>{listName === 'Development' ? 'Dev' : listName}</span>
+    <span className={`${style.taskStatus} ${style[status]}`}>{status}</span>
   )
 }

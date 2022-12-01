@@ -14,6 +14,12 @@ export enum EPriority {
   low = 'low'
 }
 
+export enum EStatus {
+  queue = 'Queue',
+  dev = 'Dev',
+  done = 'Done'
+}
+
 export interface ITask {
   id: number
   title: string
@@ -21,7 +27,7 @@ export interface ITask {
   creationDate: Date
   finishDate: Date
   priority: EPriority
-  files?: FileList
+  status?: EStatus | null
   subtasks: ITask[]
   comments?: IComment[]
 }
@@ -100,7 +106,7 @@ const rootReducer: Reducer<IRootState> = (state = initialState, action) => {
       for (let i = 0; i < tasksList.length; ++i) {
         if (tasksList[i].id === action.payload.parentId) {
           for (let j = 0; j < tasksList[i].subtasks.length; ++j) {
-            if (tasksList[i].subtasks[j] === action.payload.subtask.id) {
+            if (tasksList[i].subtasks[j].id === action.payload.subtask.id) {
               tasksList[i].subtasks[j] = action.payload.subtask
               break
             }

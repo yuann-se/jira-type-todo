@@ -13,7 +13,7 @@ export const TaskTitle = ({ taskId, taskTitle, listName }: IProps) => {
     <div className={style.taskTitleWrapper}>
       <span className={style.taskNumber}>{taskId}</span>
       <h4 className={style.taskTitle}>{taskTitle}</h4>
-      <TaskStatus listName={listName} />
+      <TaskStatus status={listName} />
     </div>
   )
 }

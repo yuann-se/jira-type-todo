@@ -37,26 +37,28 @@ export const TaskDetailsContent = () => {
       <Divider mt="30px" mb="10px" />
 
       <div className={style.meta}>
-        <TaskDateRange creationDate={task.creationDate} finishDate={task.finishDate} />
+        <div className={style.innerWrapper}>
+          <TaskDateRange creationDate={task.creationDate} finishDate={task.finishDate} />
 
-        <p className="iconWithText">
-          <AiOutlineFieldTime size={'1.3em'} />
-          <span>In process for {timeSince(new Date(task.creationDate).getTime())}</span>
-        </p>
+          <div className="iconWithText">
+            <AiOutlineFieldTime size={'1.3em'} />
+            <span>In process for {timeSince(new Date(task.creationDate).getTime())}</span>
+          </div>
 
-        <p className="iconWithText">
-          <TaskPriority priority={task.priority} />
-          <span>Priority: {task.priority}</span>
-        </p>
+          <div className="iconWithText">
+            <TaskPriority priority={task.priority} />
+            <span>Priority: {task.priority}</span>
+          </div>
+        </div>
 
-        <p className={style.editBtn}>
+        <div className={style.editBtn}>
           <AddBtn
             onClick={() => setIsEditFormOpen((prev) => !prev)}
             isOpen={isEditFormOpen}
             text='Edit'
             isEdit
           />
-        </p>
+        </div>
       </div>
 
       <CSSTransition

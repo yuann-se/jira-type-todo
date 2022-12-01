@@ -1,7 +1,7 @@
 import style from './NewTaskForm.module.scss'
 import { FormEvent, useRef, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
-import { EPriority, IRootState, ITask } from '../../store'
+import { EPriority, EStatus, IRootState, ITask } from '../../store'
 import { addSubtask, addNewTask, editTask, removeTask, removeSubtask, editSubtask } from '../../store/actionCreators'
 import DatePicker from 'react-date-picker'
 import { MdFileDownloadDone } from "react-icons/md"
@@ -23,6 +23,7 @@ export const NewTaskForm = ({ isSubtask, parentTaskId, listName, onSubmit, isEdi
 
   const [dateValue, setDateValue] = useState(isEdit ? new Date(task!.finishDate) : new Date())
   const [priority, setPriority] = useState<EPriority>(EPriority.medium)
+  const [status, setStatus] = useState<EStatus>(EStatus.queue)
 
   const taskNumber = useSelector<IRootState, number>((state) => state.taskIds)
   const subtaskNumber = useSelector<IRootState, number>((state) => state.otherIds)
@@ -33,15 +34,21 @@ export const NewTaskForm = ({ isSubtask, parentTaskId, listName, onSubmit, isEdi
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const options = [
+  const priorityOptions = [
     { value: EPriority.high, label: 'high' },
     { value: EPriority.medium, label: 'medium' },
     { value: EPriority.low, label: 'low' }
   ]
 
+  const statusOptions = [
+    { value: EStatus.queue, label: 'queue' },
+    { value: EStatus.dev, label: 'dev' },
+    { value: EStatus.done, label: 'done' }
+  ]
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(dateValue)
+
     if (!titleRef.current?.value.trim() || !dateValue) return
 
     const newTask: ITask = {
@@ -53,17 +60,18 @@ export const NewTaskForm = ({ isSubtask, parentTaskId, listName, onSubmit, isEdi
       priority: priority,
       subtasks: isEdit ? task!.subtasks : [],
       comments: isEdit ? task!.comments : [],
+      status: isSubtask ? status : null
     }
 
     if (onSubmit) onSubmit()
 
-    if (isEdit && task && listName) {
-      dispatch(editTask({ task: newTask, listName: listName }))
+    if (isEdit && isSubtask && listName && parentTaskId) {
+      dispatch(editSubtask({ subtask: newTask, listName: listName, parentId: parentTaskId }))
       return
     }
 
-    if (isEdit && isSubtask && listName && parentTaskId) {
-      dispatch(editSubtask({ subtask: newTask, listName: listName, parentId: parentTaskId }))
+    if (isEdit && task && listName) {
+      dispatch(editTask({ task: newTask, listName: listName }))
       return
     }
 
@@ -120,11 +128,23 @@ export const NewTaskForm = ({ isSubtask, parentTaskId, listName, onSubmit, isEdi
           <label className={style.label}>Priority</label>
           <Select
             className={style.select}
-            options={options}
-            defaultValue={isEdit ? { value: task?.priority, label: `${task?.priority}` } : options[1]}
+            options={priorityOptions}
+            defaultValue={isEdit ? { value: task?.priority, label: `${task?.priority}` } : priorityOptions[1]}
             onChange={(choice) => setPriority(choice?.value || EPriority.medium)}
           />
         </div>
+
+        {isSubtask && isEdit && (
+          <div className={style.inputWrapper}>
+            <label className={style.label}>Status</label>
+            <Select
+              className={style.select}
+              options={statusOptions}
+              defaultValue={isEdit ? { value: task?.status, label: `${task?.status}` } : statusOptions[0]}
+              onChange={(choice) => setStatus(choice?.value || EStatus.queue)}
+            />
+          </div>
+        )}
 
         <div className={style.inputWrapper}>
           <label htmlFor="finishDate" className={style.label}>Finish Date</label>

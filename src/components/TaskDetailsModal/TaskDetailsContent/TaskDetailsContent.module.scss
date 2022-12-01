@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 .title {
 
   margin-bottom: 20px;
@@ -9,10 +11,15 @@
 
 .meta {
   display: flex;
+  justify-content: space-between;
   margin-bottom: 30px;
 
-  &>p:not(:last-child) {
-    margin-right: 20px;
+  .innerWrapper {
+    display: flex;
+
+    &>div:not(:last-child) {
+      margin-right: 20px;
+    }
   }
 }
 
@@ -29,5 +36,17 @@
     margin-bottom: 0;
     padding: 5px 30px;
     font-size: 14px;
+  }
+}
+
+@media (max-width: $bpM) {
+  .meta {
+    .innerWrapper {
+      flex-direction: column;
+
+      &>div:not(:first-child) {
+        margin-left: 5px;
+      }
+    }
   }
 }
